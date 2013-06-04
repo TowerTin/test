@@ -26,3 +26,7 @@ RYUUKENに対して有効かつ直接的な治療法は確立されていない�
 ・生態への影響 
 2013年4月、世界保健機関 (WHO) は、RYUUKEN 
 ( ◠‿◠ )
+
+
+GoogleDrive 短縮URL
+http://p.tl/FRmj
