@@ -31,7 +31,7 @@ public class TestGame : Game
 
     protected override void Update(GameTime gameTime)
     {
-        KeyboardState keyState = Keyboard.GetState();
+        KeyboardState keyState = Keyboard.GetState();       //キーボードの押されているキーを変数keyStateに入れる
         //AキーでBGM再生
         if (keyState.IsKeyDown(Keys.A) && prevKeyState.IsKeyUp(Keys.A))
             MediaPlayer.Play(song1);
