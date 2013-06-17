@@ -1,0 +1,810 @@
+
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using System;
+using System.IO;
+using System.Threading;
+using System.Diagnostics;
+
+public class Ttin : Game
+{
+    private  GraphicsDeviceManager Gm;
+    private Vector2 pos1, pos2, posG1, posG2, posG3, posG4, posG5;
+    private  SpriteBatch sprite;
+    private Texture2D Tgazo, gazo2;
+    int st = 0;
+    private CPU cpu;
+    private ATch atch;
+    private Blast blast;
+    private createmap cmap;
+    public int[,] maptable, mapa,unimap;
+    public Texture2D[] noimg;
+    public bool flg = false;
+    public bool flg2 = true ;
+    int unitNo = 0;
+    int gold = 90000;
+    int[] uniGo = { 0, 100, 120};
+    int[] ke = { 600, 640, 680, 720, 760, 800 };
+    public Texture2D me1, me2;
+    public Ttin()
+    {
+        Gm = new GraphicsDeviceManager(this);
+        Gm.PreferredBackBufferHeight = 600;
+        Gm.PreferredBackBufferWidth = 800;
+        pos1.X = 1;
+        pos1.Y = 1;
+        pos2.X = 600;
+        pos2.Y = 0;
+        posG1.X = 600;
+        posG1.Y = 40;
+        posG2.X = 600;
+        posG2.Y = 200;
+        posG3.X = 700;
+        posG3.Y = 200;
+        mapa = new int[,] { 
+        {98,98,98,98,98,98,98,98,98,98,98,98,98,98,98},
+        {98,99,99,99,99,99,99,99,99,99,99,99,99,99,98},
+        {51,50,49,48,47,46,45,43,42,41,40,39,38,99,98},
+        {98,99,99,99,99,99,99,99,99,99,99,99,37,99,98},
+        {98,98,98,98,98,98,98,98,98,98,98,98,36,99,98},
+        {98,98,98,98,98,98,98,98,98,98,98,98,35,99,98},
+        {98,99,99,99,99,99,99,99,99,99,99,99,34,99,98},
+        {98,99,17,18,19,20,21,22,23,24,99,99,33,99,98},
+        {98,99,16,99,99,99,99,99,99,25,99,99,32,99,98},
+        {98,99,15,99,98,98,98,98,98,26,99,99,31,99,98},
+        {98,99,14,99,99,99,99,99,99,27,28,29,30,99,98}, 
+        {98,99,13,99,99,99, 5,99,99,99,99,99,99,99,98},
+        {98,99,12,11,10, 9, 8, 7, 6, 5, 4, 3, 2,99,98},
+        {98,99,99,99,99,99,99,99,99,99,99,99, 1,99,98},
+        {98,98,98,98,98,98,98,98,98,98,98,98, 0,98,98}
+        };
+        maptable = new int[,] { 
+        {49,49,49,49,49,49,49,49,49,49,49,49,49,49,49},
+        {17,17,17,17,17,17,17,17,17,17,17,17,17,17,49},
+        { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,17,49},
+        {17,17,17,17,17,17,17,17,17,17,17,17, 7,17,49},
+        {17,17,17,17,17,17,17,17,17,17,17,17, 7,17,49},
+        {49,49,49,49,49,49,49,49,49,49,49,17, 7,17,49},
+        {49,49,49,49,49,49,49,49,49,49,49,17, 7,17,49},
+        {49,49,17,17,17,17,17,17,17,17,17,17, 7,17,49},
+        {49,49,17, 7, 7, 7, 7, 7, 7, 7, 7,17, 7,17,49},
+        {49,49,17, 7,17,17,17,17,17,17, 7,17, 7,17,49},
+        {49,49,17, 7,17,49,49,49,49,17, 7, 7, 7,17,49}, 
+        {49,49,17, 7,17,17,17,17,17,17,17,17,17,17,49},
+        {49,49,17, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,17,49},
+        {49,49,17,17,17,17,17,17,17,17,17,17, 7,17,49},
+        {49,49,49,49,49,49,49,49,49,49,49,49, 7,49,49}
+        };
+
+        unimap  = new int[,] { 
+        {49,49,49,49,49,49,49,49,49,49,49,49,49,49,49},
+        {99,99,99,99,99,99,99,99,99,99,99,99,99,99,49},
+        { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,99,49},
+        {99,99,99,99,99,99,99,99,99,99,99,99, 7,99,49},
+        {49,99,99,99,99,99,99,99,99,99,99,99, 7,99,49},
+        {49,49,49,49,49,49,49,49,49,49,49,99, 7,99,49},
+        {49,49,49,49,49,49,49,49,49,49,49,99, 7,99,49},
+        {49,49,99,99,99,99,99,99,99,99,99,99, 7,99,49},
+        {49,49,99, 7, 7, 7, 7, 7, 7, 7, 7,99, 7,99,49},
+        {49,49,99, 7,99,99,99,99,99,99, 7,99, 7,99,49},
+        {49,49,99, 7,99,49,49,49,49,99, 7, 7, 7,99,49}, 
+        {49,49,99, 7,99,99,99,99,99,99,99,99,99,99,49},
+        {49,49,99, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,99,49},
+        {49,49,99,99,99,99,99,99,99,99,99,99, 7,99,49},
+        {49,49,49,49,49,49,49,49,49,49,49,49, 7,49,49}
+        };
+        noimg = new Texture2D[10];
+    }
+    
+    public static void Main(string[] arg)
+    {
+        using (Game g = new Ttin())
+        {
+            g.IsMouseVisible = true;
+            g.Run();
+        }
+    }
+    protected override void LoadContent()
+    {
+
+        sprite = new SpriteBatch(GraphicsDevice);
+        cpu = new CPU(Gm.GraphicsDevice, sprite,mapa );
+        atch = new ATch();
+        blast = new Blast(Gm.GraphicsDevice, sprite, unimap );
+        cmap = new createmap(Gm.GraphicsDevice, sprite);
+        Tgazo = Content.Load<Texture2D>("Content/sampgame");
+        gazo2 = Content.Load<Texture2D>("Content/sampgame2");
+         for (int i = 0; i < 10; i++)
+        {
+          
+                using (Stream stream = File.OpenRead("img/no" + i + ".png"))
+                {
+                    noimg[i] = Texture2D.FromStream(GraphicsDevice , stream);
+                }
+
+            
+         }
+         Stream s1= File.OpenRead("img/luM.png");
+         me1 = Texture2D.FromStream(GraphicsDevice, s1);
+         Stream s2 = File.OpenRead("img/boM.png");
+         me2 = Texture2D.FromStream(GraphicsDevice, s2);
+        base.LoadContent();
+    }
+    protected override void Update(GameTime gameTime)
+    {
+        KeyboardState state = Keyboard.GetState();
+        if (state[Keys.Up] == KeyState.Down) pos1.Y -= 5;
+        if (state[Keys.Down] == KeyState.Down) pos1.Y += 5;
+        if (state[Keys.Left] == KeyState.Down) pos1.X -= 5;
+        if (state[Keys.Right] == KeyState.Down) pos1.X += 5;
+
+        if (state[Keys.D1] == KeyState.Down)
+        {
+            unitNo = 1;
+        }
+        if (state[Keys.D2] == KeyState.Down)
+        {
+            unitNo = 2;
+        }
+      
+        mousePressChk();
+        if (st == 30)
+        {
+            cpu.setCPU(1,1);
+            st = 0;
+        }
+        else 
+        {
+            st++;
+        }
+            base.Update(gameTime);
+        
+    }
+    protected override void Draw(GameTime gameTime)
+    {
+        GraphicsDevice.Clear(Color.White);
+        sprite.Begin();
+        //sprite.Draw(Tgazo, pos1, Color.White);
+        if (flg)
+        {
+            cmap.paintmap(maptable);
+            sprite.Draw(gazo2, pos2, Color.White);
+            int w,keta=10000,next=gold ;
+            for (int i = 0; i < 5; i++)
+            {
+                posG1.X = ke[i];
+                w = next  / keta;
+             
+                sprite.Draw(noimg[w], posG1, Color.White);
+                next -= w*keta;
+                keta /= 10;
+                //posG.X += 40;
+            }
+            blast.paintBlast();
+            gold += cpu.enHP();
+            if (gold >= 99999) 
+            {
+                gold = 99999;
+            }
+            if (cpu.paintCPU(blast))
+            {
+                Stream s3 = File.OpenRead("img/gover.png");
+                Tgazo  = Texture2D.FromStream(GraphicsDevice, s3);
+                flg = false;
+            }
+            sprite.Draw(me1, posG2, Color.White);
+            sprite.Draw(me2, posG3, Color.White);
+           
+        }
+        else 
+        {
+            sprite.Draw(Tgazo, pos1, Color.White);
+ 
+        }
+        sprite.End();
+
+        base.Draw(gameTime);
+    }
+    private void mousePressChk()
+    { 
+        MouseState state = Mouse.GetState();
+        if (state.LeftButton == ButtonState.Pressed)
+        {
+            if (gold >= uniGo[unitNo])
+            {
+                if (blast.setBlast(state.X, state.Y, unitNo))
+                {
+                    gold -= uniGo[unitNo];
+                    unimap[state.Y / 40, state.X / 40] += 1;
+                }
+            }
+        }
+    
+       
+        if (state.LeftButton == ButtonState.Pressed)
+        {
+            if (state.X >= posG2.X && state.X < posG2.X + 100) 
+            {
+                if (state.Y >= posG2.Y && state.Y < posG2.Y + 100) 
+                {
+                    unitNo = 1;
+                }
+            }
+            if (state.X >= posG3.X && state.X < posG3.X + 100)
+            {
+                if (state.Y >= posG3.Y && state.Y < posG3.Y + 100)
+                {
+                    unitNo = 2;
+                }
+            }
+        }
+        if (state.LeftButton == ButtonState.Pressed)
+        {
+            if (flg2)
+            {
+                flg = true;
+                flg2 = false;
+            }
+        }
+        if (state.RightButton == ButtonState.Pressed)
+        {
+            flg = false;
+        }
+        }
+    }
+
+
+
+class ATch 
+{
+    public int  attackcheck(float  atx,float aty) 
+    {
+        return 0;
+    }
+     
+    public int mapch(int x1,int y1,int[,] map)
+    {
+        int ax = (y1 / 40);
+        int ay = (x1 / 40);
+       
+       
+        int lv = map [ax,ay];
+        int lv2=0;
+        if (ay > 0)
+        {
+            //lv2 = map[ax+1, ay+1];
+        }
+    
+        if (lv <= 0) 
+        {
+            return 0;
+        }
+        if (ax > 0)
+        {
+            if (lv > map[ax, ay + 1])
+            {
+                return 1;
+            }
+            if (lv > map[ax + 1, ay])
+            {
+                return 2;
+            }
+        }
+        if (ay > 0)
+        {
+            if (lv > map[ax, ay - 1 ])
+            {
+                return 3;
+            }
+            if (lv > map[ax - 1, ay])
+            {
+                return 4;
+            }
+        }
+
+        return -1;
+    }
+}
+
+class CPU
+{
+    const int BLASTSU = 10;
+    public  int[] x, y, mapNo,x1,y1,hp,lv;
+    
+    int[] gname;
+    int[] gname2;
+
+    Vector2[] pos;
+    private Vector3 pos3,poss;
+    public HitBox hb;
+    public ATch at;
+    public Blast blast;
+    private Texture2D[] TBlast;
+    private SpriteBatch sprite;
+    BoundingSphere bs1, bs2;
+    int con=0;
+    int life = 10;
+    int[,] map;
+   public  int[] swh;
+    public CPU(GraphicsDevice g, SpriteBatch _sprite,int[,] _m)
+    {   
+        at = new ATch();
+        pos = new Vector2[BLASTSU];
+       
+        x = new int[BLASTSU];
+        y = new int[BLASTSU];
+        x1 = new int[BLASTSU];
+        y1 = new int[BLASTSU];
+        swh = new int[BLASTSU];
+        hp = new int[BLASTSU];
+        mapNo = new int[BLASTSU];
+        lv = new int[BLASTSU];
+       
+        hb = new HitBox();
+        map = _m;
+       
+        TBlast = new Texture2D[64];
+        gname = new int[BLASTSU];
+        gname2 = new int[BLASTSU];
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            gname[i] = 0;
+            gname2[i] = 0;
+            pos[i].X = -30;
+            pos[i].Y = 88;
+            x1[i] = 1;
+            y1[i] = 0;
+            swh[i] = 0;
+            mapNo[i] = -1;
+            hp[i] = 10;
+            lv[i] =99;
+        }
+       
+        for (int i = 0; i < 64; i++)
+        {
+            if (i < 32)
+            {
+                using (Stream stream = File.OpenRead("img/Tr" + i + ".png"))
+                {
+                    TBlast[i] = Texture2D.FromStream(g, stream);
+
+                }
+            }
+            else if (i < 64)
+            {
+                using (Stream stream = File.OpenRead("img/en" + (i-32) + ".png"))
+                {
+                    TBlast[i] = Texture2D.FromStream(g, stream);
+
+                }
+            }
+        }
+        sprite = _sprite;
+    }
+    public void setCPU(int _x, int _y)
+    {
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            if (mapNo[i] == -1)
+            {
+                x[i] = _x;
+                y[i] = _y;
+                mapNo[i] = 0;
+                break;
+            }
+        }
+    }
+    int cnt = 0;
+    public void animNoUpdate()
+    {
+        cnt++;
+        if (cnt < 5) return;
+        cnt = 0;
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            if (mapNo[i] != -1)
+            {
+                mapNo[i]++;
+                if (mapNo[i] >= 7) mapNo[i] = 0 ;
+            }
+        }
+    }
+    public bool  paintCPU(Blast bl)
+    {
+        
+        for (int i = 0; i < BLASTSU; i++)
+        {
+
+            if (mapNo[i] != -1)
+            {
+                    switch (at.mapch((int)pos[i].X,(int)pos[i].Y,map))
+                    {
+                        case 0:
+                             gname[i] = 0;  
+                             pos[i].X = -30;
+                             pos[i].Y = 80;
+                             x1[i] = 1;
+                             y1[i] = 0;
+                             mapNo[i] = -1;
+                             hp[i] = 10;
+                             return true;
+                            //break ;
+                        case 1:
+                            gname[i] = 0;
+                            x1[i] = 1;
+                            y1[i] = 0;
+                             pos[i].X += x1[i];
+                             pos[i].Y += y1[i];
+                            break;
+
+                        case 2:
+                           gname[i] = 8;
+                            x1[i] = 0;
+                            y1[i] = 1;
+                             pos[i].X += x1[i];
+                             pos[i].Y += y1[i];
+                            break;
+                        case 3:
+                            gname[i] = 16;
+                            x1[i] = -1;
+                            y1[i] = 0;
+                             pos[i].X += x1[i];
+                             pos[i].Y += y1[i];
+                            break;
+                        case 4:
+                             gname[i] = 24;
+                            x1[i] = 0;
+                            y1[i] = -1;
+                             pos[i].X += x1[i];
+                             pos[i].Y += y1[i];
+                            break;
+
+                        case -1:
+                             pos[i].X += x1[i];
+                             pos[i].Y += y1[i];
+                            break;
+                    }
+
+             if(mapNo[i]!=-1)
+                sprite.Draw(TBlast[mapNo[i] + gname[i] + gname2[i]], pos[i], Color.White);
+                pos3.X = pos[i].X; 
+                pos3.Y = pos[i].Y;
+                bs1.Center = pos3; 
+                bs1.Radius = 20;
+                if(con >=50)
+                    for(int ii = 0; ii < bl.suu();ii++){ 
+                        poss.X = bl.rx(ii);
+                        poss.Y = bl.ry(ii);
+                        bs2.Center = poss;
+                        bs2.Radius =40;
+                        bl.turn(ii); 
+                        if (hb.hitcheck2(bs1, bs2))
+                        { 
+                            if (bl.interval(ii))
+                            {
+                            hp[i] -= 2 ;
+                            con = 0;
+                            }
+                    }
+                }
+                con++;
+                
+            }
+
+
+        }
+        animNoUpdate();
+        return false;
+    }
+    int nHP=10,co=0;
+    
+    public int enHP()
+    {
+        int go = 0;
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            {
+
+                if (hp[i] <= 0)
+                {
+                    go += 10;
+                    if (gname2[i] == 0)
+                    {
+                        gname2[i] = 32;
+                    }
+                    else
+                    {
+                        gname2[i] = 0;
+                    }
+                    gname[i] = 0;
+                    pos[i].X = -30;
+                    pos[i].Y = 80;
+                    x1[i] = 1;
+                    y1[i] = 0;
+                    mapNo[i] = -1;
+                    hp[i] = nHP;
+                    co++;
+                    if (co >= 30) 
+                    { 
+                        nHP += 10;
+                        co = 0;
+                    }
+                    
+                }
+            }
+        }
+        return go;
+    }
+}
+class Blast
+{
+    const int BLASTSU = 225;
+    public  int[] x, y, mapNo,inter,dam;
+    int[,] map;
+    public bool[] ani;
+    Vector2[] pos;
+    int uni,no,rr;
+    int[,] unisyu,reng;
+    int[] dame = { 0, 2, 3 };
+    
+    private Texture2D[] TBlast;
+    private SpriteBatch sprite;
+    public Blast(GraphicsDevice g, SpriteBatch _sprite,int[,] _map)
+    {
+        TBlast = new Texture2D[15];
+        for (int i = 0; i <15; i++)
+        {
+            if (i < 5)
+            {
+                using (Stream stream = File.OpenRead("img/lu" + i + ".png"))
+                {
+                    TBlast[i] = Texture2D.FromStream(g, stream);
+                }
+            }
+            if (i >= 5)
+            {
+                using (Stream stream = File.OpenRead("img/B" + (i - 5) + ".png"))
+                {
+                    TBlast[i] = Texture2D.FromStream(g, stream);
+                }
+            }
+        }
+        sprite = _sprite;
+        pos = new Vector2[BLASTSU];
+        x = new int[BLASTSU];
+        y = new int[BLASTSU];
+        mapNo = new int[BLASTSU];
+        inter = new int[BLASTSU];
+        ani = new bool[BLASTSU];
+        dam = new int[BLASTSU];
+        map = _map;
+        unisyu = new int[,] { 
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
+        };
+        reng = new int[,] { 
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
+        };
+        no = 0;
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            mapNo[i] = -1;
+            inter[i] = 0;
+           
+            ani[i] = false;
+        }
+    }
+    public bool  setBlast(int _x, int _y,int _uni)
+    {
+        uni = _uni;
+        switch (uni)
+        {
+            case 0:
+                return false;
+
+            case 1:
+                
+                rr = 40;
+                no = 0;
+                break;
+            case 2:
+                rr = 80;
+                no = 5;
+                break;
+        }
+       
+        if (_x < 600 && _y < 600)
+        {
+            if (unisyu[_x / 40, _y / 40] == -1)
+            {
+                reng[_x / 40, _y / 40] = dame[uni] ;
+                unisyu[_x / 40, _y / 40] = no;
+            }
+            if (map[_y / 40, _x / 40] == 99)
+            {
+                for (int i = 0; i < BLASTSU; i++)
+                {
+                   
+                    if (mapNo[i] == -1)
+                    {
+                        x[i] = (_x / 40) * 40;
+                        y[i] = (_y / 40) * 40;
+                        mapNo[i] = 0;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    int cnt = 0;
+    public void animNoUpdate()
+    {
+        cnt++;
+        if (cnt < 5) return;
+        cnt = 0;
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            if (ani[i])
+            {
+                if (mapNo[i] != -1)
+                {
+                    mapNo[i]++;
+                    if (mapNo[i] >= 4 + unisyu[x[i]/40, y[i]/40]) 
+                    {
+                        ani[i] = false;
+                        mapNo[i] = 0;
+                    }
+                }
+            }
+        }
+    }
+    public void paintBlast()
+    {
+       
+        for (int i = 0; i < BLASTSU; i++)
+        {
+
+            if (mapNo[i] != -1)
+            {
+                pos[i].X = x[i];
+                pos[i].Y = y[i];
+                sprite.Draw(TBlast[mapNo[i] + unisyu[x[i] / 40, y[i] / 40]], pos[i], Color.White);
+            }
+
+
+        }
+        animNoUpdate();
+    }
+    public int rx(int _x) 
+    {
+        return (int)pos[_x].X ;
+    }
+    public int atc() 
+    {
+        return 0;
+    }
+    public int ry(int _y)
+    {
+        return (int)pos[_y].Y;
+    }
+    public int rradius(int _x,int _y)
+    {
+        return reng[x[_x] / 40, y[_y] / 40];
+    }
+    public void turn(int i) 
+    {
+            inter[i] -= 1;
+    }
+    public int dm(int i)
+    {
+        return 0;
+    }
+    public int suu() 
+    {
+        return BLASTSU;
+    }
+    public bool interval(int i)
+    {
+        if (inter[i] <= 0)
+        {
+            inter[i] = 200;
+            ani[i] = true;
+            return true;
+        }
+        else 
+        {
+            //inter[i] -= 1;
+        }
+
+        return false;
+    }
+
+}
+class createmap
+{
+    private GraphicsDevice g;
+    public SpriteBatch s;
+    private Texture2D map;
+
+    public createmap(GraphicsDevice _g, SpriteBatch _s)
+    {
+        g = _g;
+        s = _s;
+        FileStream stream = File.OpenRead("img/mapTin.png");
+        map = Texture2D.FromStream(_g, stream);
+
+    }
+    public void paintmap(int[,] maptable)
+    {
+
+        Vector2 pos;
+        Rectangle rect;
+        int w, mlow, mcol;
+        pos.X = 0;
+        pos.Y = 0;
+
+        for (int i = 0; i < maptable.GetLength(0); i++)
+        {
+            for (int j = 0; j < maptable.GetLength(1); j++)
+            {
+                pos.X = j * 40;
+                w = maptable[i, j];
+                mlow = w / 16;
+                mcol = w % 16;
+                rect.X = mcol * 40;
+                rect.Y = mlow * 40;
+                rect.Width = 40;
+                rect.Height = 40;
+                s.Draw(map, pos, rect, Color.White);
+            }
+            pos.Y += 40;
+        }
+    }
+    public void setlu(int lv)
+    {
+ 
+    }
+   
+}
+class HitBox
+{
+    public bool hitcheck(BoundingSphere sphere, BoundingBox box)
+    {
+        return sphere.Intersects(box);
+    }
+
+    public bool hitcheck2(BoundingSphere sphere1, BoundingSphere sphere2)
+    {
+        return sphere1.Intersects(sphere2);
+    }
+}
