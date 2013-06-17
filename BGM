@@ -45,11 +45,14 @@ public class TestGame : Game
         if (keyState.IsKeyDown(Keys.F) && prevKeyState.IsKeyUp(Keys.F))
             MediaPlayer.Resume();
 
+        //↑キーで音量上昇
         if (keyState.IsKeyDown(Keys.Up) && prevKeyState.IsKeyUp(Keys.Up))
             MediaPlayer.Volume = MediaPlayer.Volume + 0.05f;
+        //↓キーで音量下降
         if (keyState.IsKeyDown(Keys.Down) && prevKeyState.IsKeyUp(Keys.Down))
             MediaPlayer.Volume = MediaPlayer.Volume - 0.05f;
 
+        //BACK SPACEキーでプログラム終了
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape)) this.Exit();
 
