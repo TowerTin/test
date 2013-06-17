@@ -12,8 +12,8 @@ public class TestGame : Game
     }
 
     private GraphicsDeviceManager graphicsDeviceManager;
-    private Song song1;
-    private KeyboardState prevKeyState;
+    private Song song1;                                     //音楽ファイルを入れるための変数
+    private KeyboardState prevKeyState;                     //キーボードのキーを入れるための変数
 
     public TestGame()
     {
@@ -23,9 +23,9 @@ public class TestGame : Game
 
     protected override void LoadContent()
     {
-        song1 = Content.Load<Song>("t_music104_boss08");
-        MediaPlayer.IsRepeating = true;
-        MediaPlayer.Volume = 0.5f;
+        song1 = Content.Load<Song>("t_music104_boss08");    //音楽ファイルを変数song1に入れる(""の中にはプロジェクト内の音楽ファイルの名前)
+        MediaPlayer.IsRepeating = true;                     //音楽再生のリピート管理をTRUEに変更
+        MediaPlayer.Volume = 0.5f;                          //音楽再生の音量を変更(数値の範囲は0.0f~1.0f)
         base.LoadContent();
     }
 
