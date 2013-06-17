@@ -33,7 +33,7 @@ public class TestGame : Game
     {
         KeyboardState keyState = Keyboard.GetState();       //キーボードの押されているキーを変数keyStateに入れる
         //AキーでBGM再生
-        if (keyState.IsKeyDown(Keys.A) && prevKeyState.IsKeyUp(Keys.A))
+        if (keyState.IsKeyDown(Keys.A) && prevKeyState.IsKeyUp(Keys.A))     //一度キーを押してそのキーを離した時にTRUEになるIf文
             MediaPlayer.Play(song1);
         //SキーでBGM停止
         if (keyState.IsKeyDown(Keys.S) && prevKeyState.IsKeyUp(Keys.S))
@@ -56,7 +56,7 @@ public class TestGame : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape)) this.Exit();
 
-        prevKeyState = keyState;
+        prevKeyState = keyState;                            //押されたキーを変数prevKeyStateに入れる　一度押されたキーから指を離したか確認するため
         base.Update(gameTime);
     }
 
