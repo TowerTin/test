@@ -12,9 +12,9 @@ using System.Collections.Generic;
 public class Ttin : Game
 {
     private  GraphicsDeviceManager Gm;
-    private Vector2 pos1, pos2, posG1, posG2, posG3, posG4, posG5;
+    private Vector2 pos1, pos2, posNo, posUni2, posUni3, posUni4, posUni5, posUni6, posUni7, posUni1, posG4, posG42, posG5, posUM, posUM2, posUM3;
     private  SpriteBatch sprite;
-    private Texture2D Tgazo, gazo2;
+    private Texture2D Tgazo, gazo2,icnimg;
     int st = 0;
     private CPU cpu;
     private ATch atch;
@@ -22,6 +22,7 @@ public class Ttin : Game
     private createmap cmap;
     public int[,] maptable, mapa,unimap;
     public Texture2D[] noimg;
+    private SpriteFont font;
     public bool flg = false;
     public bool flg2 = true ;
     int unitNo = -1;
@@ -29,7 +30,8 @@ public class Ttin : Game
     int[] uniGo = { 0, 100, 120};
     int[] ke = { 600, 640, 680, 720, 760, 800 };
     int eneLv = 0;
-    public Texture2D me1, me2,me3,me4;
+    bool ste=false,icn= false ;
+    public Texture2D uni1, uni2, uni3, uni4, uni5, uni6, uni7, me3, me32, me4, me5;
     public Ttin()
     {
         Gm = new GraphicsDeviceManager(this);
@@ -39,14 +41,27 @@ public class Ttin : Game
         pos1.Y = 1;
         pos2.X = 600;
         pos2.Y = 0;
-        posG1.X = 600;
-        posG1.Y = 40;
-        posG2.X = 600;
-        posG2.Y = 200;
-        posG3.X = 700;
-        posG3.Y = 200;
+        posNo.X = 600;
+        posNo.Y = 40;
+      
+        posUni1.X = 600;
+        posUni1.Y = 200; 
+        posUni2.X = 700;
+        posUni2.Y = 200;
+        posUni3.X = 600;
+        posUni3.Y = 300;
+        posUni4.X = 700;
+        posUni4.Y = 300;
+        posUni5.X = 600;
+        posUni5.Y = 400;
+        posUni6.X = 700;
+        posUni6.Y = 400;
+        posUni7.X = 600;
+        posUni7.Y = 500;
         posG4.X = 600;
         posG4.Y = 120;
+        posG42.X = 700;
+        posG42.Y = 120;
         mapa = new int[,] { 
         {98,98,98,98,98,98,98,98,98,98,98,98,98,98,98},
         {98,99,99,99,99,99,99,99,99,99,99,99,99,99,98},
@@ -112,7 +127,7 @@ public class Ttin : Game
     }
     protected override void LoadContent()
     {
-
+        font = Content.Load<SpriteFont>("Content/MS20");
         sprite = new SpriteBatch(GraphicsDevice);
         cpu = new CPU(Gm.GraphicsDevice, sprite, mapa, eneLv);
         atch = new ATch();
@@ -131,22 +146,34 @@ public class Ttin : Game
             
          }
          Stream s1= File.OpenRead("img/luM.png");
-         me1 = Texture2D.FromStream(GraphicsDevice, s1);
+         uni1 = Texture2D.FromStream(GraphicsDevice, s1);
+         Stream s11 = File.OpenRead("img/luM.png");
+         uni3 = Texture2D.FromStream(GraphicsDevice, s11);
+         Stream s12 = File.OpenRead("img/luM.png");
+         uni4 = Texture2D.FromStream(GraphicsDevice, s12);
+         Stream s13 = File.OpenRead("img/luM.png");
+         uni5 = Texture2D.FromStream(GraphicsDevice, s13);
+         Stream s14 = File.OpenRead("img/luM.png");
+         uni6 = Texture2D.FromStream(GraphicsDevice, s14);
+         Stream s15 = File.OpenRead("img/luM.png");
+         uni7 = Texture2D.FromStream(GraphicsDevice, s15);
+       
          Stream s2 = File.OpenRead("img/boM.png");
-         me2 = Texture2D.FromStream(GraphicsDevice, s2);
+         uni2 = Texture2D.FromStream(GraphicsDevice, s2);
          Stream s4 = File.OpenRead("img/lvup.png");
          me3 = Texture2D.FromStream(GraphicsDevice, s4);
+         Stream s42 = File.OpenRead("img/sale.png");
+         me32 = Texture2D.FromStream(GraphicsDevice, s42);
          Stream s5 = File.OpenRead("img/lvup2.png");
          me4 = Texture2D.FromStream(GraphicsDevice, s5);
+         Stream s6 = File.OpenRead("img/unitmen.png");
+         me5 = Texture2D.FromStream(GraphicsDevice, s6);
         base.LoadContent();
     }
     protected override void Update(GameTime gameTime)
     {
         KeyboardState state = Keyboard.GetState();
-        if (state[Keys.Up] == KeyState.Down) pos1.Y -= 5;
-        if (state[Keys.Down] == KeyState.Down) pos1.Y += 5;
-        if (state[Keys.Left] == KeyState.Down) pos1.X -= 5;
-        if (state[Keys.Right] == KeyState.Down) pos1.X += 5;
+       
 
         if (state[Keys.D1] == KeyState.Down)
         {
@@ -182,16 +209,23 @@ public class Ttin : Game
             int w,keta=10000,next=gold ;
             for (int i = 0; i < 5; i++)
             {
-                posG1.X = ke[i];
-                w = next  / keta;
-             
-                sprite.Draw(noimg[w], posG1, Color.White);
-                next -= w*keta;
-                keta /= 10;
-                //posG.X += 40;
+                try
+                {
+                    posNo.X = ke[i];
+                    w = next / keta;
+
+                    sprite.Draw(noimg[w], posNo, Color.White);
+                    next -= w * keta;
+                    keta /= 10;
+                    //posG.X += 40;
+                }
+                catch
+                {
+                    Debug.WriteLine("金のエラーあとで直す");
+                }
             }
             blast.paintBlast();
-            gold += cpu.enHP();
+            gold += cpu.enHP()+cpu.getgold ();
             if (gold >= 99999) 
             {
                 gold = 99999;
@@ -202,9 +236,16 @@ public class Ttin : Game
                 Tgazo  = Texture2D.FromStream(GraphicsDevice, s3);
                 flg = false;
             }
-            sprite.Draw(me1, posG2, Color.White);
-            sprite.Draw(me2, posG3, Color.White);
+            sprite.Draw(uni1, posUni1, Color.White);
+            sprite.Draw(uni2, posUni2, Color.White);
+            sprite.Draw(uni3, posUni3, Color.White);
+            sprite.Draw(uni4, posUni4, Color.White);
+            sprite.Draw(uni5, posUni5, Color.White);
+            sprite.Draw(uni6, posUni6, Color.White);
+            sprite.Draw(uni7, posUni7, Color.White);
+            
             sprite.Draw(me3, posG4, Color.White);
+            sprite.Draw(me32, posG42, Color.White);
         }
         else 
         {
@@ -224,18 +265,48 @@ public class Ttin : Game
                 lvani = false;
             }
         }
+        if (ste)
+        {
+            sprite.Draw(me5, posUM, Color.White);
+            posUM2.X = posUM.X+10;
+            posUM2.Y = posUM.Y + 10; 
+            sprite.DrawString(font, smess, posUM2, Color.Black);
+        }
+        if (icn)
+        {
+            sprite.Draw(icnimg, posUM3, Color.White);
+        }
         sprite.End();
 
         base.Draw(gameTime);
     }
     int lvch = -1;
     int lvc = 0;
-    int lvx, lvy, lvx2, lvy2;
-    bool lvani = false,lvup=true ;
-
+    int lvx, lvy, rvx, rvy;
+    bool lvani = false, lvup = true, lvup2 = true;
+    string smess="";
     private void mousePressChk()
     { 
         MouseState state = Mouse.GetState();
+        posUM.X = state.X;    
+        posUM.Y = state.Y;
+        if (blast.uniste(state.X, state.Y) != "")
+        {
+            ste = true;
+            smess = blast.uniste(state.X, state.Y);
+          
+        }else
+        {
+            ste = false;
+        }
+        if (icnch(state.X, state.Y))
+        {
+            icn = true;
+        }
+        else
+        {
+            icn = false;
+        }
         if (state.LeftButton == ButtonState.Pressed)
         {if(unitNo >=0)
          
@@ -243,9 +314,8 @@ public class Ttin : Game
                 {
                     if (blast.setBlast(state.X, state.Y, unitNo))
                     {
-                      
                         unimap[state.Y / 40, state.X / 40] += 1;
-                        gold -= blast.lv0(unitNo );
+                        gold -= blast.lv0(unitNo);
                       
                     }
                 }
@@ -263,16 +333,16 @@ public class Ttin : Game
        
         if (state.LeftButton == ButtonState.Pressed)
         {
-            if (state.X >= posG2.X && state.X < posG2.X + 100) 
+            if (state.X >= posUni1.X && state.X < posUni1.X + 100) 
             {
-                if (state.Y >= posG2.Y && state.Y < posG2.Y + 100) 
+                if (state.Y >= posUni1.Y && state.Y < posUni1.Y + 100) 
                 {
                     unitNo = 0;
                 }
             }
-            if (state.X >= posG3.X && state.X < posG3.X + 100)
+            if (state.X >= posUni2.X && state.X < posUni2.X + 100)
             {
-                if (state.Y >= posG3.Y && state.Y < posG3.Y + 100)
+                if (state.Y >= posUni2.Y && state.Y < posUni2.Y + 100)
                 {
                     unitNo = 1;
                 }
@@ -302,6 +372,41 @@ public class Ttin : Game
             }
 
         }
+        if (state.RightButton == ButtonState.Released)
+        {
+            if (!lvup2)
+            {
+                lvup2 = true;
+            }
+        }
+        if (state.RightButton == ButtonState.Pressed)
+        {
+            if (lvup2)
+            {
+                if (gold >= blast.lvcost2(rvx, rvy))
+                {
+                    if (blast.lvup(rvx, rvy))
+                    {
+                        gold -= blast.lvcost(rvx, rvy);
+                        posG5.X = (rvx / 40) * 40;
+                        posG5.Y = (rvy / 40) * 40;
+                        lvani = true;
+                        lvup2 = false;
+                    }
+                }
+            }
+        }
+        if (state.LeftButton == ButtonState.Pressed)
+        {
+            if (state.X >= posG42.X && state.X < posG42.X + 100)
+            {
+                if (state.Y >= posG42.Y && state.Y < posG42.Y + 40)
+                {
+                    blast.unitexit(lvx, lvy);
+                }
+            }
+        }
+            
 
         if (state.LeftButton == ButtonState.Pressed)
         {
@@ -317,12 +422,105 @@ public class Ttin : Game
             {
                 lvx = state.X;
                 lvy = state.Y;
+                rvx = state.X;
+                rvy = state.Y;
             }
         }
-       
+        if (state.RightButton == ButtonState.Pressed)
+        {
+            if (state.X < 600 && state.Y < 600)
+            {
+                lvx = state.X;
+                lvy = state.Y;
+                rvx = state.X;
+                rvy = state.Y;
+            }
+        }
 
         }
+    public bool icnch(int _x,int _y) 
+    {
+        if (_x >= posUni1.X && _x < posUni1.X + 100)
+        {
+            if (_y >= posUni1.Y && _y < posUni1.Y + 100)
+            {
+                Stream icn1 = File.OpenRead("img/Luicn.png");
+                icnimg  = Texture2D.FromStream(GraphicsDevice, icn1);
+                posUM3.X = _x;
+                posUM3.Y = _y;
+                return true;
+            }
+        }
+        if (_x >= posUni2.X && _x < posUni2.X + 100)
+        {
+            if (_y >= posUni2.Y && _y < posUni2.Y + 100)
+            {
+                Stream icn1 = File.OpenRead("img/Paicn.png");
+                icnimg = Texture2D.FromStream(GraphicsDevice, icn1);
+                posUM3.X = _x-100;
+                posUM3.Y = _y;
+                return true;
+            }
+        }
+        if (_x >= posUni3.X && _x < posUni3.X + 100)
+        {
+            if (_y >= posUni3.Y && _y < posUni3.Y + 100)
+            {
+                Stream icn1 = File.OpenRead("img/Tiicn.png");
+                icnimg = Texture2D.FromStream(GraphicsDevice, icn1);
+                posUM3.X = _x;
+                posUM3.Y = _y;
+                return true;
+            }
+        }
+        if (_x >= posUni4.X && _x < posUni4.X + 100)
+        {
+            if (_y >= posUni4.Y && _y < posUni4.Y + 100)
+            {
+                Stream icn1 = File.OpenRead("img/Izicn.png");
+                icnimg = Texture2D.FromStream(GraphicsDevice, icn1);
+                posUM3.X = _x - 100;
+                posUM3.Y = _y;
+                return true;
+            }
+        }
+        if (_x >= posUni5.X && _x < posUni5.X + 100)
+        {
+            if (_y >= posUni5.Y && _y < posUni5.Y + 100)
+            {
+                Stream icn1 = File.OpenRead("img/Ozicn.png");
+                icnimg = Texture2D.FromStream(GraphicsDevice, icn1);
+                posUM3.X = _x;
+                posUM3.Y = _y-100;
+                return true;
+            }
+        }
+        if (_x >= posUni6.X && _x < posUni6.X + 100)
+        {
+            if (_y >= posUni6.Y && _y < posUni6.Y + 100)
+            {
+                Stream icn1 = File.OpenRead("img/Hiicn.png");
+                icnimg = Texture2D.FromStream(GraphicsDevice, icn1);
+                posUM3.X = _x - 100;
+                posUM3.Y = _y-100;
+                return true;
+            }
+        }
+        if (_x >= posUni7.X && _x < posUni7.X + 100)
+        {
+            if (_y >= posUni7.Y && _y < posUni7.Y + 100)
+            {
+                Stream icn1 = File.OpenRead("img/Caicn.png");
+                icnimg = Texture2D.FromStream(GraphicsDevice, icn1);
+                posUM3.X = _x;
+                posUM3.Y = _y-100;
+                return true;
+            }
+        }
+        return false;
     }
+    
+}
 
 
 
@@ -381,8 +579,8 @@ class ATch
 
 class CPU
 {
-    const int BLASTSU = 1;
-    public  int[] x, y, mapNo,x1,y1,hp,lv,sped,kougeki;
+    const int BLASTSU = 10;
+    public  int[] x, y, mapNo,x1,y1,hp,lv,sped,kougeki,cont;
 
     List<int> eX = new List<int>();
     List<int> eY = new List<int>();
@@ -410,9 +608,11 @@ class CPU
     private Texture2D[] TBlast;
     private SpriteBatch sprite;
     BoundingSphere bs1, bs2;
+    BoundingBox box1;
     int con=0;
     int life = 5;
     int[,] map;
+    int gold=0;
    public  int[] swh;
     public CPU(GraphicsDevice g, SpriteBatch _sprite,int[,] _m,int eneNo)
     {   
@@ -429,6 +629,7 @@ class CPU
         lv = new int[BLASTSU];
         sped = new int[BLASTSU];
         kougeki = new int[BLASTSU];
+        cont = new int[BLASTSU];
         hb = new HitBox();
         map = _m;
        
@@ -447,7 +648,8 @@ class CPU
             mapNo[i] = -1;
             hp[i] = enemystat[eneNo, 0];
             lv[i] = 99;
-            sped[i] = 10;
+            cont[i] = 10;
+            sped[i] = 0;
         }
        
         for (int i = 0; i < 64; i++)
@@ -483,6 +685,7 @@ class CPU
                 y[i] = _y;
                 hp[i] = enemystat[en, 0];
                 kougeki[i] = enemystat[en, 1];
+                sped[i] = enemystat[en, 2];
                 emapNo.Add(0);
                 mapNo[i] = 0;
                 break;
@@ -527,7 +730,7 @@ class CPU
                             gname[i] = 0;
                             pos[i].X = -30;
                             pos[i].Y = 80;
-                            x1[i] = enemystat[en,2];
+                            x1[i] = sped [i];
                             y1[i] = 0;
                             mapNo[i] = -1;
                             life -= kougeki[i];
@@ -542,7 +745,7 @@ class CPU
                                 break ;
                         case 1:
                             gname[i] = 0;
-                            x1[i] = enemystat[en, 2];
+                            x1[i] = sped[i];
                             y1[i] = 0;
                             pos[i].X += x1[i];
                             pos[i].Y += y1[i];
@@ -551,13 +754,13 @@ class CPU
                         case 2:
                             gname[i] = 8;
                             x1[i] = 0;
-                            y1[i] = enemystat[en, 2];
+                            y1[i] = sped[i];
                             pos[i].X += x1[i];
                             pos[i].Y += y1[i];
                             break;
                         case 3:
                             gname[i] = 16;
-                            x1[i] =- enemystat[en, 2];
+                            x1[i] = -sped[i];
                             y1[i] = 0;
                             pos[i].X += x1[i];
                             pos[i].Y += y1[i];
@@ -565,7 +768,7 @@ class CPU
                         case 4:
                             gname[i] = 24;
                             x1[i] = 0;
-                            y1[i] = -enemystat[en,2];
+                            y1[i] = -sped[i];
                             pos[i].X += x1[i];
                             pos[i].Y += y1[i];
                             break;
@@ -579,6 +782,7 @@ class CPU
                 //}
                     if (mapNo[i] != -1)
                         sprite.Draw(TBlast[mapNo[i] + gname[i] + gname2[i]], pos[i], Color.White);
+                 
                     pos3.X = pos[i].X;
                     pos3.Y = pos[i].Y;
                     bs1.Center = pos3;
@@ -588,16 +792,58 @@ class CPU
                     {
                         poss.X = bl.rx(ii);
                         poss.Y = bl.ry(ii);
-                        bs2.Center = poss;
-                        bs2.Radius = bl.renReng(ii);
-                        bl.turn(ii);
-                        if (hb.hitcheck2(bs1, bs2))
+                        if (bl.getuni(ii) == 1)
                         {
-                            if (bl.interval(ii))
+                            tiger(bl.rx(ii), bl.ry(ii), getmuki());
+                            bl.turn(ii);
+                            if (bl.interval(ii))            
                             {
-                                //Debug.WriteLine(bl.damegi(ii));
-                                hp[i] -= bl.damegi(ii);
-                                //con = 0;
+                            for (int i2 = 0; i2 < BLASTSU; i2++)
+                            {
+                                pos3.X = pos[i2].X;
+                                pos3.Y = pos[i2].Y;
+                                bs1.Center = pos3;
+                                bs1.Radius = 20;
+                                if (hb.hitcheck(bs1, box1))
+                                {
+                                    
+
+                                    hp[i2] -= 100;
+
+                                    //con = 0;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            poss.X = bl.rx(ii);
+                            poss.Y = bl.ry(ii);
+                            bs2.Center = poss;
+                            bs2.Radius = bl.renReng(ii);
+                            bl.turn(ii);
+
+
+                            if (hb.hitcheck2(bs1, bs2))
+                            {
+                                //Debug.WriteLine (getmuki());
+                                if (bl.interval(ii))
+                                {
+
+                                    if (bl.getuni(ii) == 4)
+                                    {
+                                        if (sped[i] > 1)
+                                            sped[i] -= 1;
+                                    }
+                                    if (bl.getuni(ii) == 5)
+                                    {
+                                        gold += (hp[i] / 10);
+                                    }
+                                    //Debug.WriteLine(bl.damegi(ii));
+                                    hp[i] -= bl.damegi(ii);
+
+                                    //con = 0;
+                                }
                             }
                         }
                     }
@@ -607,11 +853,75 @@ class CPU
               
 
             
-            sped[i] -= 1;
+            //sped[i] -= 1;
         }
         
         animNoUpdate();
         return false;
+    }
+    public void tiger(int _x,int _y,int muki)
+    {
+        if (muki == 0)
+        {
+            box1.Min = new Vector3(_x, _y, 0);
+            box1.Max = new Vector3(600, _y + 20, 0);
+        }
+        if (muki == 1)
+        {
+            //box1.Min = new Vector3(0, _x, 0);
+            //box1.Max = new Vector3(_x, _y + 20, 0);
+        }
+        if (muki == 2)
+        {
+            box1.Min = new Vector3(0, _y, 0);
+            box1.Max = new Vector3(_x, _y + 20, 0);
+        }
+        if (muki == 3)
+        {
+        //    box1.Min = new Vector3(0, _x, 0);
+        //    box1.Max = new Vector3(_y, _y + 20, 0);
+        }
+    }
+    public int getmuki()
+    {
+        string ss = "", s2 = "";
+        int muki1,muki2;
+        int chx, chy;
+        if (pos3.X < poss.X)
+        {
+            muki1 = 2;
+            chx = (int)(poss.X - pos3.X);
+        }
+        else
+        {
+             muki1 = 0;
+            chx = (int)(pos3.X - poss.X);
+        }
+        if (pos3.Y < poss.Y)
+        {
+            muki2 = 3;
+            chy = (int)(poss.Y - pos3.Y);
+        }
+        else
+        {
+             muki2 = 1;
+            chy = (int)(pos3.Y - poss.Y);
+        }
+        if (chx < chy)
+        {
+            return muki1;
+        }
+        else
+        {
+            return muki2;
+        }   
+       
+    }
+    public int getgold()
+    {
+        int g2 = gold ;
+        gold = 0;
+        return g2 ;
     }
     int nHP=10,co=0;
     
@@ -673,7 +983,7 @@ class Unit
 /*ティガー*/{{550,80,2,1000},{100,95,2,800},{150,120,3,600},{150,150,3,400},{550,255,4,400}},
 /*イズミ*/{{240,10,3,80},{50,17,3,80},{50,22,3,80},{100,35,4,80},{160,50,5,60}},
 /*オーズ*/{{300,5,2,120},{100,15,3,120},{100,25,3,120},{100,35,3,120},{400,45,3,100}},
-/*ヒコヨシ*/{{200,-1,1,200},{100,-1,1,150},{150,-1,1,100},{300,-1,2,100},{350,-1,2,80}},
+/*ヒコヨシ*/{{200,1,1,200},{100,4,1,150},{150,8,1,100},{300,16,2,100},{350,32,2,80}},
 /*キャラリオ*/{{1000,100,-1,2000},{1000,200,-1,2000},{1000,400,-1,1500},{1000,800,-1,1500},{1000,1600,-1,1000}},
 };
     
@@ -735,23 +1045,7 @@ class Unit
         {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
         {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
         };
-        reng = new int[,] { 
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
-        };
+       
         no = 0;
         for (int i = 0; i < BLASTSU; i++)
         {
@@ -769,25 +1063,7 @@ class Unit
             return false;
         }
         no = _uni * 5;
-        //rr = unitst[uni,, 2];
-        //switch (uni)
-        //{
-        //    case 0:
-        //        rr = unitst[uni, 0, 2];
-
-        //    case 1:
-                
-        //        rr = 40;
-        //        no = 0;
-        //        break;
-        //    case 2:
-        //        rr = 80;
-        //        no = 5;
-        //        break;
-        //    case -1:
-        //        return false;
-        //}
-
+      
         if (_x < 600 && _y < 600 && _x > 0 && _y > 0)
         {
           
@@ -798,8 +1074,7 @@ class Unit
                     {
                         unit[i] = uni; 
                         if (unisyu[_x / 40, _y / 40] == -1)
-                        {          
-                            reng[_x / 40, _y / 40] = 0 ;
+                        {                                      //reng[_x / 40, _y / 40] = 0 ;
                             unisyu[_x / 40, _y / 40] = no;
                         }
                         if (map[_y / 40, _x / 40] == 99)
@@ -858,6 +1133,30 @@ class Unit
         }
         animNoUpdate();
     }
+    public string uniste(int _x, int _y)
+    {
+        int x=_x, y=_y;
+        string steit="";
+
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            if (pos[i].X <= x && x < pos[i].X + 40)
+            {
+                if (pos[i].Y <= y && y < pos[i].Y + 40)
+                {
+                    if (lv[i] < 4)
+                    {
+                        steit = "Next->" + unitst[unit[i], lv[i] + 1, 0] + "pt";
+                    }
+                    else 
+                    {
+                        steit = "LvMAX!!";
+                    }
+                }
+            }
+        }
+        return steit ;
+    }
     public int renReng(int i)
     {
         //ren[i] = rengg[unitst[unit[i], lv[i], 2]];
@@ -894,6 +1193,10 @@ class Unit
     {
         return 0;
     }
+    public int getuni(int i) 
+    {
+        return unit[i];
+    }
     public int suu() 
     {
         return BLASTSU;
@@ -902,7 +1205,6 @@ class Unit
     {
         if (inter[i] <= 0)
         {
-            
             inter[i] = unitst[unit[i], lv[i], 3];
             ani[i] = true;
             return true;
@@ -920,7 +1222,7 @@ class Unit
         {
             if (pos[i].X <= x && x < pos[i].X + 40) 
             {
-                if (pos[i].X <= x && x < pos[i].X + 40)
+                if (pos[i].Y <= y && y < pos[i].Y + 40)
                 {
                     if (lv[i] < 4)
                     {
@@ -974,6 +1276,26 @@ class Unit
             }
         }
         return 0;
+    }
+    public void  unitexit(int x, int y)
+    {
+        for (int i = 0; i < BLASTSU; i++)
+        {
+            if (pos[i].X <= x && x < pos[i].X + 40)
+            {
+                if (pos[i].Y <= y && y < pos[i].Y + 40)
+                {
+                    unisyu[y / 40, x / 40] = -1;
+                    dam[i] = 0;
+                    ren[i] = 0; 
+                    mapNo[i] = -1;
+                    inter[i] = 0;
+                    lv[i] = 0;
+                    ani[i] = false;
+                  
+                }
+            }
+        }
     }
     public int lv0(int uni)
     {            
