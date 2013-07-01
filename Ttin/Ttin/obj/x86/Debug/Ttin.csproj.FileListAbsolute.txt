@@ -1,0 +1,20 @@
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\bin\x86\Debug\Content\ch01.xnb
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\bin\x86\Debug\Content\ch04.xnb
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\bin\x86\Debug\Ttin.exe
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\bin\x86\Debug\Ttin.pdb
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\obj\x86\Debug\Ttin.exe
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\obj\x86\Debug\Ttin.pdb
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\bin\x86\Debug\Content\sampgame.xnb
+C:\Users\minami\Desktop\XNA\Ttin\Ttin\bin\x86\Debug\Content\sampgame2.xnb
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\bin\x86\Debug\Content\ch01.xnb
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\bin\x86\Debug\Content\ch04.xnb
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\bin\x86\Debug\Content\sampgame.xnb
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\bin\x86\Debug\Content\sampgame2.xnb
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\bin\x86\Debug\Ttin.exe
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\bin\x86\Debug\Ttin.pdb
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\obj\x86\Debug\Ttin.exe
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\Ttin\obj\x86\Debug\Ttin.pdb

@@ -1,0 +1,2 @@
+C:\Users\minami\Desktop\XNA\Ttin\TtinContent\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Imamatsu\Documents\Visual Studio 2010\Projects\C#\Ttin\TtinContent\obj\x86\Debug\ResolveAssemblyReference.cache
