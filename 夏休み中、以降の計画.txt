@@ -1,14 +1,13 @@
-�ċx�ݒ������\��̂���
-�P�C�^�C�g�����
-�Q�C�X�e�[�W��ʂ̍쐬
-�R�CBGI,BGM,SE��T��
-�S�C���C���v���O�����̃I�u�W�F�N�g�w����
+﻿夏休み中完了予定のもの
+１，タイトル画面,ステージ画面の作成
+２，BGI,BGM,SEを探す
+３，メインプログラムのオブジェクト指向化
 
 
-�ċx�݈ȍ~
-�P�C�v���O�����̌����e�X�g
-�Q�CBGI�ABGM�ASE�̌���
-�R�C�f�U�C���ȂɈ˗������摜�S�ʍ����ւ�
-�S�C�f�o�b�N
-�T�C�p���[�o�����X�̒���
-�U�C���\�p�p���[�|�C���g�̍쐬
+夏休み以降
+１，プログラムの結合テスト
+２，BGI、BGM、SEの結合
+３，デザイン科に依頼した画像全般差し替え
+４，デバック
+５，パワーバランスの調整
+６，発表用パワーポイントの作成

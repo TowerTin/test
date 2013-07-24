@@ -1,4 +1,4 @@
-�P�Cgithub,GoogleDrive�̊Ǘ��ƕҏW
-�Q�C�X�e�[�W�̃}�b�v�쐬
-�R�CBGM�ASE�̃`�F�b�N
-�S�C�Z���t�̎��s�p�t�@�C���ւ̏�������
+﻿１，github,GoogleDriveの管理と編集
+２，ステージのマップ作成
+３，BGM、SEのチェック
+４，セリフの実行用ファイルへの書き換え

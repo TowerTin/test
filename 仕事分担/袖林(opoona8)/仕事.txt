@@ -1,4 +1,4 @@
-�P�CBGM�̃v���O�����쐬
-�Q�CGithub�̊Ǘ�
-�R�C�w�i�摜
-�S�CBGM�ASE�̃`�F�b�N�f�ޏW��
+﻿１，BGMのプログラム作成
+２，Githubの管理
+３，背景画像
+４，BGM、SEのチェック素材集め
